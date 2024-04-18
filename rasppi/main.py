@@ -78,7 +78,9 @@ if __name__ == "__main__":
                 
                 # Find the IP address associated with the specified MAC address
                 mac_address = "C0-A5-E8-6F-94-E7"
+                
                 ip_address = get_device_ip(mac_address)
+                print(mac_address)
                 
                 # Send the captured image to the device with the specified MAC address
                 send_image_and_receive_text(ip_address)
