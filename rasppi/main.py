@@ -23,7 +23,7 @@ def capture_image():
 def get_device_ip(mac_address):
     # Execute the arp -a command to get the list of devices in the network
     arp_output = subprocess.check_output(["arp", "-a"]).decode()
-
+    print(arp_output)
     # Use regular expressions to find the IP address associated with the given MAC address
     pattern = r'([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\s+' + mac_address.replace('-', ':')
     match = re.search(pattern, arp_output)
@@ -80,7 +80,7 @@ if __name__ == "__main__":
                 mac_address = "C0-A5-E8-6F-94-E7"
                 
                 ip_address = get_device_ip(mac_address)
-                print(mac_address)
+                print(ip_address)
                 
                 # Send the captured image to the device with the specified MAC address
                 send_image_and_receive_text(ip_address)
@@ -88,7 +88,7 @@ if __name__ == "__main__":
                 break  # Exit the loop after capturing and sending the image
 
             # Wait for a short time before reading again
-            time.sleep(0.1)
+            time.sleep(9000)
 
     except KeyboardInterrupt:
         print("Exiting...")
