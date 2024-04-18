@@ -1,0 +1,75 @@
+import subprocess
+import socket
+import pickle
+import struct
+import RPi.GPIO as GPIO
+import time
+import os
+
+# Set the GPIO mode to BCM
+GPIO.setmode(GPIO.BCM)
+
+# Define the GPIO pin
+gpio_pin = 26
+
+# Setup the GPIO pin as input with pull-up resistor
+GPIO.setup(gpio_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+def capture_image():
+    # Use raspistill command to capture an image and store it as img.png
+    subprocess.run(["raspistill", "-o", "img.png"])
+
+def send_image_and_receive_text():
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    host = "localhost"  # Raspberry Pi hostname
+    port = 55001
+    try:
+        client_socket.connect((host, port))
+        print("Connected to Raspberry Pi")
+
+        # Open and send the image file to the server
+        with open("img.png", "rb") as img_file:
+            image_data = img_file.read()
+            client_socket.sendall(struct.pack("Q", len(image_data)) + image_data)
+            print("Image sent to server")
+
+        # Receive the text from the server
+        received_text = client_socket.recv(4096).decode()
+        print("Received text from server:", received_text)
+
+    except Exception as e:
+        print("Error:", e)
+    finally:
+        client_socket.close()
+
+if __name__ == "__main__":
+    try:
+        while True:
+            # Read the GPIO pin state
+            gpio_state = GPIO.input(gpio_pin)
+
+            # Check if the GPIO pin is low
+            if gpio_state == GPIO.LOW:
+                print("GPIO pin is LOW. Capturing and sending image...")
+                
+                # Check if img.png already exists, if yes, delete it
+                if os.path.exists("img.png"):
+                    os.remove("img.png")
+                
+                # Capture a new image
+                capture_image()
+                
+                # Send the captured image
+                send_image_and_receive_text()
+                
+                break  # Exit the loop after capturing and sending the image
+
+            # Wait for a short time before reading again
+            time.sleep(9000)
+
+    except KeyboardInterrupt:
+        print("Exiting...")
+
+    finally:
+        # Cleanup GPIO
+        GPIO.cleanup()
