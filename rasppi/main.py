@@ -27,6 +27,7 @@ def get_device_ip(mac_address):
     # Use regular expressions to find the IP address associated with the given MAC address
     pattern = r'([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\s+' + mac_address.replace('-', ':')
     match = re.search(pattern, arp_output)
+    print(match)
 
     if match:
         return match.group(1)
@@ -80,7 +81,7 @@ if __name__ == "__main__":
                 mac_address = "C0-A5-E8-6F-94-E7"
                 
                 ip_address = get_device_ip(mac_address)
-                print(ip_address)
+                
                 
                 # Send the captured image to the device with the specified MAC address
                 send_image_and_receive_text(ip_address)
