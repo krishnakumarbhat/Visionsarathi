@@ -1,4 +1,5 @@
 import subprocess
+import re
 import socket
 import pickle
 import struct
@@ -19,13 +20,29 @@ def capture_image():
     # Use raspistill command to capture an image and store it as img.png
     subprocess.run(["raspistill", "-o", "img.png"])
 
-def send_image_and_receive_text():
+def get_device_ip(mac_address):
+    # Execute the arp -a command to get the list of devices in the network
+    arp_output = subprocess.check_output(["arp", "-a"]).decode()
+
+    # Use regular expressions to find the IP address associated with the given MAC address
+    pattern = r'([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\s+' + mac_address.replace('-', ':')
+    match = re.search(pattern, arp_output)
+
+    if match:
+        return match.group(1)
+    else:
+        return None
+
+def send_image_and_receive_text(ip_address):
+    if ip_address is None:
+        print("Device with the specified MAC address not found in the network.")
+        return
+
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    host = "localhost"  # Raspberry Pi hostname
     port = 55001
     try:
-        client_socket.connect((host, port))
-        print("Connected to Raspberry Pi")
+        client_socket.connect((ip_address, port))
+        print("Connected to the device at IP:", ip_address)
 
         # Open and send the image file to the server
         with open("img.png", "rb") as img_file:
@@ -59,13 +76,17 @@ if __name__ == "__main__":
                 # Capture a new image
                 capture_image()
                 
-                # Send the captured image
-                send_image_and_receive_text()
+                # Find the IP address associated with the specified MAC address
+                mac_address = "C0-A5-E8-6F-94-E7"
+                ip_address = get_device_ip(mac_address)
+                
+                # Send the captured image to the device with the specified MAC address
+                send_image_and_receive_text(ip_address)
                 
                 break  # Exit the loop after capturing and sending the image
 
             # Wait for a short time before reading again
-            time.sleep(9000)
+            time.sleep(0.1)
 
     except KeyboardInterrupt:
         print("Exiting...")
