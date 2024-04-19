@@ -22,9 +22,11 @@ GPIO.setup(gpio_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def get_device_ip(mac_address):
     # Execute the arp -a command to get the list of devices in the network
+    mac_address = mac_address.lower().replace(':', '-')
     print("getting deviceip")
     arp_output = subprocess.check_output(["arp", "-a"]).decode()
     print(arp_output)
+    
     # Use regular expressions to find the IP address associated with the given MAC address
     pattern = r'([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\s+' + mac_address.replace('-', ':')
     match = re.search(pattern, arp_output)
