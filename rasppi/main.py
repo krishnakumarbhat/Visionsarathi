@@ -67,6 +67,7 @@ if __name__ == "__main__":
             # Read the GPIO pin state
             gpio_state = GPIO.input(gpio_pin)
             print("stared the code..")
+            print(gpio_state)
             # Check if the GPIO pin is low
             if gpio_state == GPIO.LOW:
                 print("GPIO pin is LOW. Capturing and sending image...")
@@ -76,7 +77,7 @@ if __name__ == "__main__":
                     os.remove("img.png")
                 
                 # Capture a new image
-                capture_image()
+                # capture_image()
                 
                 # Find the IP address associated with the specified MAC address
                 mac_address = "C0-A5-E8-6F-94-E7"
