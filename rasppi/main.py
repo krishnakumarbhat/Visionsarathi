@@ -83,8 +83,8 @@ if __name__ == "__main__":
                 print("GPIO pin is LOW. Capturing and sending image...")
                 
                 # Check if img.png already exists, if yes, delete it
-                if os.path.exists("img.png"):
-                    os.remove("img.png")
+                # if os.path.exists("img.png"):
+                #     os.remove("img.png")
                 
                 # Capture a new image
                 # capture_image()
