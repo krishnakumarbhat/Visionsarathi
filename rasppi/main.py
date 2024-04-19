@@ -57,7 +57,7 @@ def send_image_and_receive_text(ip_address):
         print("Connected to the device at IP:", ip_address)
 
         # Open and send the image file to the server
-        with open("img.png", "rb") as img_file:
+        with open("tab.png", "rb") as img_file:
             image_data = img_file.read()
             client_socket.sendall(struct.pack("Q", len(image_data)) + image_data)
             print("Image sent to server")
@@ -101,7 +101,7 @@ if __name__ == "__main__":
                 # break  # Exit the loop after capturing and sending the image
 
             # Wait for a short time before reading again
-            time.sleep(15)
+            time.sleep(1)
 
     except KeyboardInterrupt:
         print("Exiting...")
