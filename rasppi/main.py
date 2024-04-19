@@ -88,10 +88,10 @@ if __name__ == "__main__":
                 # Send the captured image to the device with the specified MAC address
                 send_image_and_receive_text(ip_address)
                 
-                break  # Exit the loop after capturing and sending the image
+                # break  # Exit the loop after capturing and sending the image
 
             # Wait for a short time before reading again
-            time.sleep(9000)
+            time.sleep(15)
 
     except KeyboardInterrupt:
         print("Exiting...")
