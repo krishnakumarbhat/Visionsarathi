@@ -22,7 +22,7 @@ def capture_image():
 
 def get_device_ip(mac_address):
     # Execute the arp -a command to get the list of devices in the network
-    mac_address = mac_address.lower().replace(':', '-')
+    mac_address = mac_address.lower().replace('-', ':')
     print(f"my mac : {mac_address} ")
     print("getting deviceip")
     arp_output = subprocess.check_output(["arp", "-a"]).decode()
