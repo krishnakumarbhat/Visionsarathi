@@ -21,22 +21,25 @@ def capture_image():
     subprocess.run(["raspistill", "-o", "img.png"])
 
 def get_device_ip(mac_address):
-    # Execute the arp -a command to get the list of devices in the network
+    # Convert the MAC address to lowercase and replace colons with hyphens
     mac_address = mac_address.lower().replace('-', ':')
-    print(f"my mac : {mac_address} ")
-    print("getting deviceip")
+    
+    # Execute the arp -a command to get the list of devices in the network
+    print("Getting device IP...")
     arp_output = subprocess.check_output(["arp", "-a"]).decode()
-    print(arp_output)
+    print("ARP output:", arp_output)  # Debugging information
     
     # Use regular expressions to find the IP address associated with the given MAC address
-    pattern = r'([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\s+' + mac_address.replace('-', ':')
+    pattern = r'([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\s+' + mac_address
     match = re.search(pattern, arp_output)
-    print(match)
+    
+    print("Match:", match)  # Debugging information
 
     if match:
         return match.group(1)
     else:
         return None
+
 
 def send_image_and_receive_text(ip_address):
     if ip_address is None:
