@@ -22,6 +22,7 @@ GPIO.setup(gpio_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def get_device_ip(mac_address):
     # Execute the arp -a command to get the list of devices in the network
+    print("getting deviceip")
     arp_output = subprocess.check_output(["arp", "-a"]).decode()
     print(arp_output)
     # Use regular expressions to find the IP address associated with the given MAC address
@@ -65,7 +66,7 @@ if __name__ == "__main__":
         while True:
             # Read the GPIO pin state
             gpio_state = GPIO.input(gpio_pin)
-
+            print("stared the code..")
             # Check if the GPIO pin is low
             if gpio_state == GPIO.LOW:
                 print("GPIO pin is LOW. Capturing and sending image...")
