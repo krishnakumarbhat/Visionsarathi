@@ -16,9 +16,9 @@ gpio_pin = 26
 # Setup the GPIO pin as input with pull-up resistor
 GPIO.setup(gpio_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-def capture_image():
-    # Use raspistill command to capture an image and store it as img.png
-    subprocess.run(["raspistill", "-o", "img.png"])
+# def capture_image():
+#     # Use raspistill command to capture an image and store it as img.png
+#     subprocess.run(["raspistill", "-o", "img.png"])
 
 def get_device_ip(mac_address):
     # Execute the arp -a command to get the list of devices in the network
