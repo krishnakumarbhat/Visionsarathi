@@ -24,12 +24,12 @@ def get_device_ip(mac_address):
     # Convert the MAC address to lowercase and replace hyphens with colons
     mac_address = mac_address.lower().replace('-', ':')
     print("My MAC address:", mac_address)  # Debugging information
-    
+
     # Execute the arp -a command to get the list of devices in the network
     print("Getting device IP...")
     arp_output = subprocess.check_output(["arp", "-a"]).decode()
     print("ARP output:", arp_output)  # Debugging information
-    
+
     # Split the ARP output into lines and iterate through each line
     for line in arp_output.split('\n'):
         # Check if the MAC address is in the line
@@ -38,7 +38,7 @@ def get_device_ip(mac_address):
             ip_address_match = re.search(r'(\d+\.\d+\.\d+\.\d+)', line)
             if ip_address_match:
                 return ip_address_match.group(1)
-    
+
     # If no matching IP address is found
     print("Device with the specified MAC address not found in the network.")
     return None
@@ -81,23 +81,23 @@ if __name__ == "__main__":
             # Check if the GPIO pin is low
             if gpio_state == GPIO.LOW:
                 print("GPIO pin is LOW. Capturing and sending image...")
-                
+
                 # Check if img.png already exists, if yes, delete it
                 # if os.path.exists("img.png"):
                 #     os.remove("img.png")
-                
+
                 # Capture a new image
                 # capture_image()
-                
+
                 # Find the IP address associated with the specified MAC address
                 mac_address = "C0-A5-E8-6F-94-E7"
-                
+
                 ip_address = get_device_ip(mac_address)
-                
-                
+
+
                 # Send the captured image to the device with the specified MAC address
                 send_image_and_receive_text(ip_address)
-                
+
                 # break  # Exit the loop after capturing and sending the image
 
             # Wait for a short time before reading again
