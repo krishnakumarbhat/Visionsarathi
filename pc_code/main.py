@@ -69,7 +69,7 @@ def process_image_and_send_text(num, client_socket):
     image = transform(raw_image).unsqueeze(0).to(device)
 
     # Load and initialize image captioning model
-    model_url = 'model.pth'  # Replace 'model.pth' with the actual path to your pretrained model
+    model_url = '../../model.pth' 
     model = blip_decoder(pretrained=model_url, image_size=image_size, vit='base')
     model.eval()
     model = model.to(device)

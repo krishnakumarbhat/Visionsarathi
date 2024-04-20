@@ -3,7 +3,7 @@ This is an innovative project aimed at enhancing the visual experience for indiv
 
 
 Overview
-VisioSpeak is a project dedicated to improving the visual experience for individuals with impairments. Leveraging machine learning and natural language processing, the goal is to generate efficient and coherent natural language descriptions of captured images. The project integrates seamlessly with image recognition, offering users a unified and user-friendly interface to interact with the system.
+Visionsarathi is a project dedicated to improving the visual experience for individuals with impairments. Leveraging machine learning and natural language processing, the goal is to generate efficient and coherent natural language descriptions of captured images. The project integrates seamlessly with image recognition, offering users a unified and user-friendly interface to interact with the system.
 
 Features
 Efficient Image Descriptions: Utilize advanced NLP techniques to generate clear and concise natural language descriptions for captured images.
