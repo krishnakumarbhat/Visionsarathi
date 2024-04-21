@@ -18,7 +18,8 @@ GPIO.setup(gpio_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def capture_image():
     # Use raspistill command to capture an image and store it as img.png
-    subprocess.run(["raspistill", "-o", "img.png"])
+    # subprocess.run(["raspistill", "-o", "img.png"])
+    subprocess.run(["fswebcam"," -r" ,"1280x720"," --no-banner"," img.png"])
 
 def get_device_ip(mac_address):
     # Convert the MAC address to lowercase and replace hyphens with colons
@@ -87,7 +88,7 @@ if __name__ == "__main__":
                 #     os.remove("img.png")
 
                 # Capture a new image
-                # capture_image()
+                capture_image()
 
                 # Find the IP address associated with the specified MAC address
                 mac_address = "C0-A5-E8-6F-94-E7"
