@@ -113,3 +113,6 @@ Improve error handling and logging for comprehensive error reporting and system 
 6. Conclusion
 The image captioning and text optimization project successfully demonstrates the integration of deep learning models and libraries for generating descriptive captions and optimizing text for clarity and conciseness. With further refinement and enhancements, the system can be deployed in various applications, including assistive technologies for visually impaired individuals and content creation tools for social media and marketing platforms.
 
+When GPIO 19 is low, set GPIO 13 high.
+Store the audio output file as audio.wav and replace it if already present.
+Play the audio again when GPIO 6 is low.
