@@ -46,7 +46,7 @@ def send_image_and_receive_text(ip_address):
         client_socket.connect((ip_address, port))
         print("Connected to the device at IP:", ip_address)
 
-        with open("img.png", "rb") as img_file:
+        with open("img3.png", "rb") as img_file:
             image_data = img_file.read()
             client_socket.sendall(struct.pack("Q", len(image_data)) + image_data)
             print("Image sent to server")
