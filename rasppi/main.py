@@ -14,7 +14,7 @@ GPIO.setmode(GPIO.BCM)
 
 # Define the GPIO pins
 gpio_pin_capture = 26
-gpio_pin_sound = 14  # Connected to Amp DIN
+gpio_pin_sound = 21  # Connected to Amp DIN
 
 # Setup the GPIO pins
 GPIO.setup(gpio_pin_capture, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -117,7 +117,7 @@ def main():
 
             if gpio_state_capture == GPIO.LOW:
                 print("GPIO pin is LOW. Capturing and sending image...")
-                capture_image()
+                # capture_image()
 
                 mac_address = "C0-A5-E8-6F-94-E7"
                 ip_address = get_device_ip(mac_address)
