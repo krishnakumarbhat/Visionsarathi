@@ -5,8 +5,8 @@ import pickle
 import struct
 import RPi.GPIO as GPIO
 import time
-import pyaudio
 import wave
+import pyaudio
 
 # Set the GPIO mode to BCM
 GPIO.setmode(GPIO.BCM)
@@ -34,8 +34,8 @@ def get_device_ip(mac_address):
                 return ip_address_match.group(1)
     return None
 
-def send_image_and_receive_text(ip_address):
-    """Send captured image to the specified IP address and receive text."""
+def send_image_and_receive_audio(ip_address):
+    """Send captured image to the specified IP address and receive audio."""
     if ip_address is None:
         print("Device with the specified MAC address not found in the network.")
         return
@@ -46,21 +46,33 @@ def send_image_and_receive_text(ip_address):
         client_socket.connect((ip_address, port))
         print("Connected to the device at IP:", ip_address)
 
-        with open("img3.png", "rb") as img_file:
+        with open("img.png", "rb") as img_file:
             image_data = img_file.read()
             client_socket.sendall(struct.pack("Q", len(image_data)) + image_data)
             print("Image sent to server")
 
-        received_text = client_socket.recv(4096).decode()
-        print("Received text from server:", received_text)
+        # Receive audio data
+        audio_data = b''
+        while True:
+            packet = client_socket.recv(4096)
+            if not packet:
+                break
+            audio_data += packet
+
+        return audio_data
 
     except Exception as e:
         print("Error:", e)
     finally:
         client_socket.close()
 
-def play_sound(file_path):
-    """Play sound using PyAudio."""
+def save_audio(audio_data, file_path):
+    """Save received audio data as a WAV file."""
+    with open(file_path, 'wb') as audio_file:
+        audio_file.write(audio_data)
+
+def play_audio(file_path):
+    """Play audio using PyAudio."""
     CHUNK = 1024
 
     wf = wave.open(file_path, 'rb')
@@ -105,12 +117,15 @@ def main():
                 mac_address = "C0-A5-E8-6F-94-E7"
                 ip_address = get_device_ip(mac_address)
 
-                send_image_and_receive_text(ip_address)
+                audio_data = send_image_and_receive_audio(ip_address)
+
+                # Save received audio data
+                audio_file_path = "audio.wav"
+                save_audio(audio_data, audio_file_path)
 
             if gpio_state_sound == GPIO.LOW:
                 print("GPIO pin is LOW. Playing sound...")
-                sound_file_path = "sound.wav"
-                play_sound(sound_file_path)
+                play_audio("audio.wav")
 
             time.sleep(1)
 
