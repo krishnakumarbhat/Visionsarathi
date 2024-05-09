@@ -7,6 +7,7 @@ import RPi.GPIO as GPIO
 import time
 import wave
 import pyaudio
+import os
 
 # Set the GPIO mode to BCM
 GPIO.setmode(GPIO.BCM)
@@ -70,36 +71,40 @@ def save_audio(audio_data, file_path):
     """Save received audio data as a WAV file."""
     with open(file_path, 'wb') as audio_file:
         audio_file.write(audio_data)
+    print("Audio saved to:", file_path)
 
 def play_audio(file_path):
     """Play audio using PyAudio."""
-    CHUNK = 1024
+    if os.path.exists(file_path):
+        CHUNK = 1024
 
-    wf = wave.open(file_path, 'rb')
+        wf = wave.open(file_path, 'rb')
 
-    # Instantiate PyAudio
-    p = pyaudio.PyAudio()
+        # Instantiate PyAudio
+        p = pyaudio.PyAudio()
 
-    # Open stream
-    stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
-                    channels=wf.getnchannels(),
-                    rate=wf.getframerate(),
-                    output=True)
+        # Open stream
+        stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
+                        channels=wf.getnchannels(),
+                        rate=wf.getframerate(),
+                        output=True)
 
-    # Read data
-    data = wf.readframes(CHUNK)
-
-    # Play the sound
-    while data:
-        stream.write(data)
+        # Read data
         data = wf.readframes(CHUNK)
 
-    # Stop stream
-    stream.stop_stream()
-    stream.close()
+        # Play the sound
+        while data:
+            stream.write(data)
+            data = wf.readframes(CHUNK)
 
-    # Close PyAudio
-    p.terminate()
+        # Stop stream
+        stream.stop_stream()
+        stream.close()
+
+        # Close PyAudio
+        p.terminate()
+    else:
+        print("Audio file not found.")
 
 def main():
     try:
