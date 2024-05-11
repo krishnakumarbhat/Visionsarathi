@@ -136,7 +136,7 @@ def main():
 
                 # Save received audio data
                 audio_file_path = "audio.wav"
-                save_audio(audio_data, audio_file_path)
+                # save_audio(audio_data, audio_file_path)
 
             if gpio_state_sound == GPIO.LOW:
                 print("GPIO pin is LOW. Playing sound...")
