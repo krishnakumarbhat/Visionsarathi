@@ -8,6 +8,7 @@ import time
 import wave
 import pyaudio
 import os
+from pygame import mixer
 
 # Set the GPIO mode to BCM
 GPIO.setmode(GPIO.BCM)
@@ -99,12 +100,19 @@ def play_audio(file_path):
 
         # Stop stream
         stream.stop_stream()
-        stream.close()
+        stream.close() 9
 
         # Close PyAudio
         p.terminate()
     else:
         print("Audio file not found.")
+
+def speak(file_path):
+    sound.seek()
+    mixer.music.load(file_path)
+    mixer.music.play()
+    
+    
 
 def main():
     try:
@@ -130,7 +138,9 @@ def main():
 
             if gpio_state_sound == GPIO.LOW:
                 print("GPIO pin is LOW. Playing sound...")
-                play_audio("audio.wav")
+                # play_audio("audio.wav")
+                speak("audio.wav")
+            
 
             time.sleep(1)
 
