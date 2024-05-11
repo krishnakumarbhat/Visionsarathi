@@ -100,7 +100,7 @@ def play_audio(file_path):
 
         # Stop stream
         stream.stop_stream()
-        stream.close() 9
+        stream.close()
 
         # Close PyAudio
         p.terminate()
