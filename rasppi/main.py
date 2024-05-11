@@ -110,6 +110,7 @@ def play_audio(file_path):
 def speak(file_path):
     # sound = speak(
     # sound.seek()
+    mixer.init()
     mixer.music.load(file_path)
     mixer.music.play()
     
