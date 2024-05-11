@@ -122,8 +122,8 @@ def main():
             gpio_state_capture = GPIO.input(gpio_pin_capture)
             gpio_state_sound = GPIO.input(gpio_pin_sound)
 
-            print("GPIO state (capture):", gpio_state_capture)
-            print("GPIO state (sound):", gpio_state_sound)
+            # print("GPIO state (capture):", gpio_state_capture)
+            # print("GPIO state (sound):", gpio_state_sound)
 
             if gpio_state_capture == GPIO.LOW:
                 print("GPIO pin is LOW. Capturing and sending image...")
