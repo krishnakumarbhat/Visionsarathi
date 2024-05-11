@@ -108,7 +108,8 @@ def play_audio(file_path):
         print("Audio file not found.")
 
 def speak(file_path):
-    sound.seek()
+    # sound = speak(
+    # sound.seek()
     mixer.music.load(file_path)
     mixer.music.play()
     
