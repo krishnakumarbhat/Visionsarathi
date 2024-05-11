@@ -68,51 +68,51 @@ def send_image_and_receive_audio(ip_address):
     finally:
         client_socket.close()
 
-def save_audio(audio_data, file_path):
-    """Save received audio data as a WAV file."""
-    with open(file_path, 'wb') as audio_file:
-        audio_file.write(audio_data)
-    print("Audio saved to:", file_path)
+# def save_audio(audio_data, file_path):
+#     """Save received audio data as a WAV file."""
+#     with open(file_path, 'wb') as audio_file:
+#         audio_file.write(audio_data)
+#     print("Audio saved to:", file_path)
 
-def play_audio(file_path):
-    """Play audio using PyAudio."""
-    if os.path.exists(file_path):
-        CHUNK = 1024
+# def play_audio(file_path):
+#     """Play audio using PyAudio."""
+#     if os.path.exists(file_path):
+#         CHUNK = 1024
 
-        wf = wave.open(file_path, 'rb')
+#         wf = wave.open(file_path, 'rb')
 
-        # Instantiate PyAudio
-        p = pyaudio.PyAudio()
+#         # Instantiate PyAudio
+#         p = pyaudio.PyAudio()
 
-        # Open stream
-        stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
-                        channels=wf.getnchannels(),
-                        rate=wf.getframerate(),
-                        output=True)
+#         # Open stream
+#         stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
+#                         channels=wf.getnchannels(),
+#                         rate=wf.getframerate(),
+#                         output=True)
 
-        # Read data
-        data = wf.readframes(CHUNK)
+#         # Read data
+#         data = wf.readframes(CHUNK)
 
-        # Play the sound
-        while data:
-            stream.write(data)
-            data = wf.readframes(CHUNK)
+#         # Play the sound
+#         while data:
+#             stream.write(data)
+#             data = wf.readframes(CHUNK)
 
-        # Stop stream
-        stream.stop_stream()
-        stream.close()
+#         # Stop stream
+#         stream.stop_stream()
+#         stream.close()
 
-        # Close PyAudio
-        p.terminate()
-    else:
-        print("Audio file not found.")
+#         # Close PyAudio
+#         p.terminate()
+#     else:
+#         print("Audio file not found.")
 
-def speak(file_path):
-    # sound = speak(
-    # sound.seek()
-    mixer.init()
-    mixer.music.load(file_path)
-    mixer.music.play()
+# def speak(file_path):
+#     # sound = speak(
+#     # sound.seek()
+#     mixer.init()
+#     mixer.music.load(file_path)
+    # mixer.music.play()
     
     
 
