@@ -125,7 +125,7 @@ def main():
 
             if gpio_state_sound == GPIO.LOW:
                 print("GPIO pin is LOW. Playing sound...")
-                # play_audio("audio.mp3")
+                play_audio("audio.mp3")
 
             time.sleep(1)
 
