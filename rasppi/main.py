@@ -96,11 +96,11 @@ def play_audio(music_file_path):
     """Play the audio file."""
     pygame.mixer.init()
     pygame.mixer.music.load(music_file_path)
-    # pygame.mixer.music.set_volume(0.7)
+    pygame.mixer.music.set_volume(0.7)
     pygame.mixer.music.play()
     while pygame.mixer.music.get_busy():
-        # continue
-        time.sleep(1)
+        continue
+        # time.sleep(1)
 
 
 
@@ -123,7 +123,7 @@ def main():
                 print("GPIO pin is LOW. Playing sound...")
                 play_audio("audio.mp3")
 
-            time.sleep(1)
+            # time.sleep(1)
 
     except KeyboardInterrupt:
         print("Exiting...")
