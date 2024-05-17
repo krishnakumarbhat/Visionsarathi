@@ -38,6 +38,8 @@ def get_device_ip(mac_address):
     print("hesdfo")
     for line in arp_output.split('\n'):
         if mac_address in line:
+            print(mac_address)
+            print(line)
             ip_address_match = re.search(r'(\d+\.\d+\.\d+\.\d+)', line)
             if ip_address_match:
                 return ip_address_match.group(1)
