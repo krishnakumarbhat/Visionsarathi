@@ -43,6 +43,7 @@ def get_device_ip(mac_address):
             ip_address_match = re.search(r'(\d+\.\d+\.\d+\.\d+)', line)
             print(ip_address_match)
             if ip_address_match:
+                print(ip_address_match)
                 return ip_address_match.group(1)
     return None
     
