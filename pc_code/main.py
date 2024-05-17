@@ -9,6 +9,7 @@ import easyocr
 from gtts import gTTS
 import io
 import os
+from langchain_community.llms import Ollama
 
 def send_msg(sock, msg):
     """Send a message through the socket."""
@@ -21,7 +22,8 @@ def receive_image_and_send_audio():
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         host = socket.gethostname()
         ip = socket.gethostbyname(host)
-        port = 55001
+        print(ip)
+        port = 52001
 
         try:
             server_socket.bind((ip, port))
@@ -89,14 +91,23 @@ def process_image_and_send_audio(img_path, client_socket):
         image_caption = caption[0]
 
     # Perform OCR
+    print("doing ocr")
     reader = easyocr.Reader(['en'])
     ocr_result = reader.readtext(img_path)
     ocr_text = "\n".join([detection[1] for detection in ocr_result])
 
     # Combine image caption and OCR text
     combined_text = f"Image Caption:\n{image_caption}\n\nOCR Text:\n{ocr_text}"
+    print(f"before :{combined_text}")
+    
+    output = f"this is image captioning output with ocr in it.can you describe it poperly(without any spell error)for blind person [(imagecap:{image_caption} and ocrtext:{ocr_text})]"
+    # print(output)
+    print("doing ollana")
+    # Invoke Ollama for text processing
+    llm = Ollama(model="llama2")
+    combined_text = llm.invoke(output)
     print(combined_text)
-
+    print("hi")
     # Convert text to speech
     tts = gTTS(text=combined_text, lang='en')
     audio_data = io.BytesIO()
