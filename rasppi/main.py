@@ -39,6 +39,7 @@ def get_device_ip(mac_address):
             ip_address_match = re.search(r'(\d+\.\d+\.\d+\.\d+)', line)
             if ip_address_match:
                 return ip_address_match.group(1)
+    print("heke")
     return None
 
 def recv_msg(sock):
