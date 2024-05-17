@@ -1,14 +1,11 @@
 import subprocess
 import re
 import socket
-import pickle
 import struct
 import RPi.GPIO as GPIO
 import time
-import wave
-import pyaudio
 import os
-from pygame import mixer
+import pygame
 
 # Set the GPIO mode to BCM
 GPIO.setmode(GPIO.BCM)
@@ -22,8 +19,8 @@ GPIO.setup(gpio_pin_capture, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(gpio_pin_sound, GPIO.OUT)
 
 def capture_image():
-    """Capture an image using fswebcam."""
-    subprocess.run(["fswebcam", "-r", "640x480", "-b", "MJPEG", "--no-banner", "img.png"])
+    """Capture an image using fswebcam and save it as img.png."""
+    os.system("fswebcam -r 640x480 -b MJPEG --no-banner img.png")
 
 def get_device_ip(mac_address):
     """Get the IP address associated with a given MAC address."""
@@ -36,8 +33,31 @@ def get_device_ip(mac_address):
                 return ip_address_match.group(1)
     return None
 
+def recv_msg(sock):
+    """Receive a message from the socket."""
+    raw_msglen = recvall(sock, 4)
+    if not raw_msglen:
+        return None
+    msglen = struct.unpack('>I', raw_msglen)[0]
+    return recvall(sock, msglen)
+
+def recvall(sock, n):
+    """Receive n bytes from the socket."""
+    data = bytearray()
+    while len(data) < n:
+        packet = sock.recv(n - len(data))
+        if not packet:
+            return None
+        data.extend(packet)
+    return data
+
+def save_audio(audio_data, audio_file_path):
+    """Save audio data to a file."""
+    with open(audio_file_path, "wb") as audio_file:
+        audio_file.write(audio_data)
+
 def send_image_and_receive_audio(ip_address):
-    """Send captured image to the specified IP address and receive audio."""
+    """Send an image to the server and receive audio in response."""
     if ip_address is None:
         print("Device with the specified MAC address not found in the network.")
         return
@@ -48,73 +68,37 @@ def send_image_and_receive_audio(ip_address):
         client_socket.connect((ip_address, port))
         print("Connected to the device at IP:", ip_address)
 
+        # Open and send the image file to the server
         with open("img.png", "rb") as img_file:
             image_data = img_file.read()
             client_socket.sendall(struct.pack("Q", len(image_data)) + image_data)
             print("Image sent to server")
 
-        # Receive audio data
-        audio_data = b''
-        while True:
-            packet = client_socket.recv(4096)
-            if not packet:
-                break
-            audio_data += packet
+        # Receive the audio from the server
+        received_data = recv_msg(client_socket)
 
-        return audio_data
+        # Handle audio format (replace with your specific format)
+        audio_format = "mp3"
+        audio_file_path = f"received_audio.{audio_format}"
+        with open(audio_file_path, "wb") as audio_file:
+            audio_file.write(received_data)
+        print(f"Received audio data (format: {audio_format})")
+        
+        return audio_file_path
 
     except Exception as e:
         print("Error:", e)
     finally:
         client_socket.close()
 
-# def save_audio(audio_data, file_path):
-#     """Save received audio data as a WAV file."""
-#     with open(file_path, 'wb') as audio_file:
-#         audio_file.write(audio_data)
-#     print("Audio saved to:", file_path)
-
-# def play_audio(file_path):
-#     """Play audio using PyAudio."""
-#     if os.path.exists(file_path):
-#         CHUNK = 1024
-
-#         wf = wave.open(file_path, 'rb')
-
-#         # Instantiate PyAudio
-#         p = pyaudio.PyAudio()
-
-#         # Open stream
-#         stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
-#                         channels=wf.getnchannels(),
-#                         rate=wf.getframerate(),
-#                         output=True)
-
-#         # Read data
-#         data = wf.readframes(CHUNK)
-
-#         # Play the sound
-#         while data:
-#             stream.write(data)
-#             data = wf.readframes(CHUNK)
-
-#         # Stop stream
-#         stream.stop_stream()
-#         stream.close()
-
-#         # Close PyAudio
-#         p.terminate()
-#     else:
-#         print("Audio file not found.")
-
-# def speak(file_path):
-#     # sound = speak(
-#     # sound.seek()
-#     mixer.init()
-#     mixer.music.load(file_path)
-    # mixer.music.play()
-    
-    
+def play_audio(music_file_path):
+    """Play the audio file."""
+    pygame.mixer.init()
+    pygame.mixer.music.load(music_file_path)
+    pygame.mixer.music.set_volume(0.7)
+    pygame.mixer.music.play()
+    while pygame.mixer.music.get_busy():
+        continue
 
 def main():
     try:
@@ -122,27 +106,21 @@ def main():
             gpio_state_capture = GPIO.input(gpio_pin_capture)
             gpio_state_sound = GPIO.input(gpio_pin_sound)
 
-            # print("GPIO state (capture):", gpio_state_capture)
-            # print("GPIO state (sound):", gpio_state_sound)
-
             if gpio_state_capture == GPIO.LOW:
                 print("GPIO pin is LOW. Capturing and sending image...")
-                # capture_image()
+                capture_image()
 
                 mac_address = "C0-A5-E8-6F-94-E7"
                 ip_address = get_device_ip(mac_address)
 
-                audio_data = send_image_and_receive_audio(ip_address)
+                audio_file_path = send_image_and_receive_audio(ip_address)
 
-                # Save received audio data
-                audio_file_path = "audio.wav"
-                # save_audio(audio_data, audio_file_path)
+                if audio_file_path:
+                    save_audio(audio_file_path)
 
             if gpio_state_sound == GPIO.LOW:
                 print("GPIO pin is LOW. Playing sound...")
-                # play_audio("audio.wav")
-                # speak("audio.wav")
-            
+                play_audio("audio.mp3")
 
             time.sleep(1)
 
