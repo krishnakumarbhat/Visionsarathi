@@ -84,7 +84,7 @@ def send_image_and_receive_audio(ip_address):
 
         # Handle audio format (replace with your specific format)
         audio_format = "mp3"
-        audio_file_path = f"received_audio.{audio_format}"
+        audio_file_path = f"audio.{audio_format}"
         with open(audio_file_path, "wb") as audio_file:
             audio_file.write(received_data)
         print(f"Received audio data (format: {audio_format})")
