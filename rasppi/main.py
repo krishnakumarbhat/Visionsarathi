@@ -26,22 +26,15 @@ def capture_image():
 
     # Run the command using os.system
     # os.system("fswebcam -r 640x480 -b MJPEG --no-banner img.png")
-    print("shdjh")
     os.system("raspistill -o img.png")
-    print("hello")
 
 def get_device_ip(mac_address):
     """Get the IP address associated with a given MAC address."""
     mac_address = mac_address.lower().replace('-', ':')
-    print("hesdfsdfllo")
     arp_output = subprocess.check_output(["arp", "-a"]).decode()
-    print("hesdfo")
     for line in arp_output.split('\n'):
         if mac_address in line:
-            print(mac_address)
-            print(line)
             ip_address_match = re.search(r'(\d+\.\d+\.\d+\.\d+)', line)
-            print(ip_address_match)
             if ip_address_match:
                 print(ip_address_match)
                 return ip_address_match.group(1)
@@ -73,7 +66,7 @@ def send_image_and_receive_audio(ip_address):
         return
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    port = 55001
+    port = 52001
     try:
         client_socket.connect((ip_address, port))
         print("Connected to the device at IP:", ip_address)
