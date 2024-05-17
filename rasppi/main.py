@@ -27,6 +27,7 @@ def capture_image():
     # Run the command using os.system
     # os.system("fswebcam -r 640x480 -b MJPEG --no-banner img.png")
     os.system("raspistill -o img.png")
+    print("hello")
 
 def get_device_ip(mac_address):
     """Get the IP address associated with a given MAC address."""
@@ -114,12 +115,12 @@ def main():
             if gpio_state_capture == GPIO.LOW:
                 print("GPIO pin is LOW. Capturing and sending image...")
                 capture_image()
-
+                print("hello")
                 mac_address = "C0-A5-E8-6F-94-E7"
                 ip_address = get_device_ip(mac_address)
 
                 audio_file_path = send_image_and_receive_audio(ip_address)
-
+                
             if gpio_state_sound == GPIO.LOW:
                 print("GPIO pin is LOW. Playing sound...")
                 # play_audio("audio.mp3")
