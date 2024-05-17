@@ -98,8 +98,8 @@ def play_audio(music_file_path):
     pygame.mixer.music.load(music_file_path)
     pygame.mixer.music.set_volume(0.7)
     pygame.mixer.music.play()
-    while pygame.mixer.music.get_busy():
-        continue
+    time.sleep(20)  # Sleep for the known duration of the audio file
+
 
 def main():
     try:
