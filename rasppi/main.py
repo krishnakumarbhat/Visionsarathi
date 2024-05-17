@@ -33,7 +33,7 @@ def capture_image():
 def get_device_ip(mac_address):
     """Get the IP address associated with a given MAC address."""
     mac_address = mac_address.lower().replace('-', ':')
-    arp_output = subprocess.run(["arp", "-a"], capture_output=True, text=True).stdout
+    arp_output = subprocess.check_output(["arp", "-a"]).decode()
     for line in arp_output.split('\n'):
         if mac_address in line:
             ip_address_match = re.search(r'(\d+\.\d+\.\d+\.\d+)', line)
