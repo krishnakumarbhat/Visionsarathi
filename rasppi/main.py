@@ -98,8 +98,12 @@ def play_audio(music_file_path):
     pygame.mixer.music.load(music_file_path)
     pygame.mixer.music.set_volume(0.7)
     pygame.mixer.music.play()
+    # while pygame.mixer.music.get_busy():
+    #     continue
     while pygame.mixer.music.get_busy():
-        continue
+        time.sleep(1)
+
+
 
 def main():
     try:
@@ -118,7 +122,7 @@ def main():
 
             if gpio_state_sound == GPIO.LOW:
                 print("GPIO pin is LOW. Playing sound...")
-                # play_audio("audio.mp3")
+                play_audio("audio.mp3")
 
             time.sleep(1)
 
