@@ -26,6 +26,7 @@ def capture_image():
 
     # Run the command using os.system
     # os.system("fswebcam -r 640x480 -b MJPEG --no-banner img.png")
+    print("shdjh")
     os.system("raspistill -o img.png")
     print("hello")
 
