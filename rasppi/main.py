@@ -21,11 +21,12 @@ GPIO.setup(gpio_pin_sound, GPIO.OUT)
 def capture_image():
     """Capture an image using fswebcam and save it as img.png."""
     # Use raspistill command to capture an image and store it as img.png
-    subprocess.run(["raspistill", "-o", "img.png"])
+    # subprocess.run(["raspistill", "-o", "img.png"])
     # subprocess.run(["fswebcam -r 1280x720 --no-banner","img.png"])
 
     # Run the command using os.system
     # os.system("fswebcam -r 640x480 -b MJPEG --no-banner img.png")
+    os.system("raspistill -o img.png")
 
 def get_device_ip(mac_address):
     """Get the IP address associated with a given MAC address."""
