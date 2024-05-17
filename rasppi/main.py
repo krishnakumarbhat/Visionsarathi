@@ -33,16 +33,14 @@ def capture_image():
 def get_device_ip(mac_address):
     """Get the IP address associated with a given MAC address."""
     mac_address = mac_address.lower().replace('-', ':')
-    print("sdjkvn")
-    arp_output = os.system("arp -a")
+    arp_output = subprocess.run(["arp", "-a"], capture_output=True, text=True).stdout
     for line in arp_output.split('\n'):
         if mac_address in line:
             ip_address_match = re.search(r'(\d+\.\d+\.\d+\.\d+)', line)
             if ip_address_match:
                 return ip_address_match.group(1)
-    print("heke")
     return None
-
+    
 def recv_msg(sock):
     """Receive a message from the socket."""
     raw_msglen = recvall(sock, 4)
