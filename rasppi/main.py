@@ -123,7 +123,7 @@ def main():
                 print("GPIO pin is LOW. Playing sound...")
                 play_audio("audio.mp3")
 
-            # time.sleep(1)
+            time.sleep(1)
 
     except KeyboardInterrupt:
         print("Exiting...")
