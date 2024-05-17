@@ -34,7 +34,7 @@ def get_device_ip(mac_address):
     """Get the IP address associated with a given MAC address."""
     mac_address = mac_address.lower().replace('-', ':')
     print("sdjkvn")
-    arp_output = os.system(["arp -a"])
+    arp_output = os.system("arp -a")
     for line in arp_output.split('\n'):
         if mac_address in line:
             ip_address_match = re.search(r'(\d+\.\d+\.\d+\.\d+)', line)
