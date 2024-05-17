@@ -118,9 +118,9 @@ def main():
                 print("hello")
                 mac_address = "C0-A5-E8-6F-94-E7"
                 ip_address = get_device_ip(mac_address)
-
+                print(ip_address)
                 audio_file_path = send_image_and_receive_audio(ip_address)
-                
+                print(audio_file_path)
             if gpio_state_sound == GPIO.LOW:
                 print("GPIO pin is LOW. Playing sound...")
                 # play_audio("audio.mp3")
