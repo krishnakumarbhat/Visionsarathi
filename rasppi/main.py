@@ -56,10 +56,6 @@ def recvall(sock, n):
         data.extend(packet)
     return data
 
-def save_audio(audio_data, audio_file_path):
-    """Save audio data to a file."""
-    with open(audio_file_path, "wb") as audio_file:
-        audio_file.write(audio_data)
 
 def send_image_and_receive_audio(ip_address):
     """Send an image to the server and receive audio in response."""
@@ -119,9 +115,6 @@ def main():
                 ip_address = get_device_ip(mac_address)
 
                 audio_file_path = send_image_and_receive_audio(ip_address)
-
-                if audio_file_path:
-                    save_audio(audio_file_path)
 
             if gpio_state_sound == GPIO.LOW:
                 print("GPIO pin is LOW. Playing sound...")
