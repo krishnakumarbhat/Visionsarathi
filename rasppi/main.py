@@ -6,7 +6,7 @@ import RPi.GPIO as GPIO
 import time
 import os
 import pygame
-import siu 
+# import siu 
 
 # Set the GPIO mode to BCM
 GPIO.setmode(GPIO.BCM)
@@ -95,15 +95,15 @@ def send_image_and_receive_audio(ip_address):
     finally:
         client_socket.close()
 
-def play_audio(music_file_path):
-    """Play the audio file."""
-    pygame.mixer.init()
-    pygame.mixer.music.load(music_file_path)
-    pygame.mixer.music.set_volume(0.7)
-    pygame.mixer.music.play()
-    while pygame.mixer.music.get_busy():
-        continue
-        # time.sleep(1)
+# def play_audio(music_file_path):
+#     """Play the audio file."""
+#     pygame.mixer.init()
+#     pygame.mixer.music.load(music_file_path)
+#     pygame.mixer.music.set_volume(0.7)
+#     pygame.mixer.music.play()
+#     while pygame.mixer.music.get_busy():
+#         continue
+#         # time.sleep(1)
 
 
 
@@ -124,7 +124,6 @@ def main():
                 print(audio_file_path)
             if gpio_state_sound == GPIO.LOW:
                 print("GPIO pin is LOW. Playing sound...")
-                # play_audio("audio.mp3")
                 os.system("python siu.py")
 
 
