@@ -6,6 +6,7 @@ import RPi.GPIO as GPIO
 import time
 import os
 import pygame
+import siu 
 
 # Set the GPIO mode to BCM
 GPIO.setmode(GPIO.BCM)
@@ -123,7 +124,9 @@ def main():
                 print(audio_file_path)
             if gpio_state_sound == GPIO.LOW:
                 print("GPIO pin is LOW. Playing sound...")
-                play_audio("audio.mp3")
+                # play_audio("audio.mp3")
+                 os.system("python siu.py)
+
 
             time.sleep(1)
 
