@@ -10,10 +10,10 @@ pin_ean = 5
 pin_kan = 6
 pin_main = 26
 
-# Set up the GPIO pins as inputs
-GPIO.setup(pin_ean, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(pin_kan, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(pin_main, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+# Set up the GPIO pins as inputs with pull-up resistors
+GPIO.setup(pin_ean, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(pin_kan, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(pin_main, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def run_script(script_name):
     try:
@@ -35,9 +35,9 @@ def main_callback(channel):
     run_script('main.py')
 
 # Add event detection for each GPIO pin
-GPIO.add_event_detect(pin_ean, GPIO.RISING, callback=ean_callback, bouncetime=300)
-GPIO.add_event_detect(pin_kan, GPIO.RISING, callback=kan_callback, bouncetime=300)
-GPIO.add_event_detect(pin_main, GPIO.RISING, callback=main_callback, bouncetime=300)
+GPIO.add_event_detect(pin_ean, GPIO.FALLING, callback=ean_callback, bouncetime=300)
+GPIO.add_event_detect(pin_kan, GPIO.FALLING, callback=kan_callback, bouncetime=300)
+GPIO.add_event_detect(pin_main, GPIO.FALLING, callback=main_callback, bouncetime=300)
 
 try:
     # Keep the script running to detect events
