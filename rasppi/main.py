@@ -100,6 +100,7 @@ def main():
                     for audio_file_path in audio_file_paths:
                         print(f"Audio file saved: {audio_file_path}")
                 os.system("python ean.py")
+                break
 
             time.sleep(1)
 
