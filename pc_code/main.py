@@ -78,6 +78,7 @@ def process_image_and_send_audio(img_path, client_socket):
     """Process the image, generate a caption and OCR text, convert to speech, and send audio back to the client."""
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     image_size = 384
+    global image_caption, ocr_text
 
     raw_image = Image.open(img_path).convert('RGB')
     transform = get_image_transform(image_size)
@@ -89,7 +90,7 @@ def process_image_and_send_audio(img_path, client_socket):
     ocr_text = perform_ocr(img_path)
     combined_text = combine_caption_and_ocr(image_caption, ocr_text)
     processed_text = process_text_with_ollama(combined_text)
-    print("llama3:{processed_text}")
+    print(f"llama3:{processed_text}")
     audio_data = text_to_speech(processed_text)
     send_audio_to_client(audio_data, client_socket)
 
@@ -111,7 +112,7 @@ def load_captioning_model(device, image_size):
 def generate_image_caption(model, image):
     """Generate a caption for the image."""
     with torch.no_grad():
-        caption = model.generate(image, sample=False, num_beams=3, max_length=35, min_length=9)
+        caption = model.generate(image, sample=False, num_beams=3, max_length=35, min_length=11)
     return caption[0]
 
 def perform_ocr(img_path):
@@ -122,7 +123,7 @@ def perform_ocr(img_path):
 
 def combine_caption_and_ocr(image_caption, ocr_text):
     """Combine the image caption and OCR text."""
-    print(f"IM : {image_caption} OCR: {ocr_text}")
+    print(f"IM : {image_caption} and OCR: {ocr_text}")
     return f"Image Caption:\n{image_caption}\n\nOCR Text:\n{ocr_text}"
 
 def process_text_with_ollama(text):
