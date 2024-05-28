@@ -11,7 +11,7 @@ import pygame
 GPIO.setmode(GPIO.BCM)
 
 # Define the GPIO pins
-gpio_pin_capture = 26
+gpio_pin_capture = 6
 
 # Setup the GPIO pins
 GPIO.setup(gpio_pin_capture, GPIO.IN, pull_up_down=GPIO.PUD_UP)
