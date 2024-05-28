@@ -8,7 +8,6 @@ pin_6 = 6
 
 # Setup GPIO
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(pin_13, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(pin_26, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(pin_5, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(pin_6, GPIO.IN, pull_up_down=GPIO.PUD_UP)
