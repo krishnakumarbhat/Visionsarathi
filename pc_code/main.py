@@ -10,6 +10,7 @@ from gtts import gTTS
 import io
 import os
 from langchain_community.llms import Ollama
+from googletrans import Translator
 
 def send_msg(sock, msg):
     """Send a message through the socket."""
@@ -79,7 +80,6 @@ def process_image_and_send_audio(img_path, client_socket):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     image_size = 384
     global image_caption, ocr_text
-
     raw_image = Image.open(img_path).convert('RGB')
     transform = get_image_transform(image_size)
     image = transform(raw_image).unsqueeze(0).to(device)
@@ -90,9 +90,14 @@ def process_image_and_send_audio(img_path, client_socket):
     ocr_text = perform_ocr(img_path)
     combined_text = combine_caption_and_ocr(image_caption, ocr_text)
     processed_text = process_text_with_ollama(combined_text)
-    print(f"llama3:{processed_text}")
-    audio_data = text_to_speech(processed_text)
-    send_audio_to_client(audio_data, client_socket)
+    print(f"Llama3 output: {processed_text}")
+
+    audio_data_en = text_to_speech(processed_text, 'en')
+    audio_data_kan = text_to_speech(processed_text, 'kn')
+
+    save_audio_file(audio_data_kan, 'output_audio_kan.mp3')
+    save_audio_file(audio_data_en, 'output_audio.mp3')
+    send_audio_to_client(audio_data_en, audio_data_kan, client_socket)
 
 def get_image_transform(image_size):
     """Get image transformation pipeline."""
@@ -123,7 +128,7 @@ def perform_ocr(img_path):
 
 def combine_caption_and_ocr(image_caption, ocr_text):
     """Combine the image caption and OCR text."""
-    print(f"IM : {image_caption} and OCR: {ocr_text}")
+    print(f"IM: {image_caption} and OCR: {ocr_text}")
     return f"Image Caption:\n{image_caption}\n\nOCR Text:\n{ocr_text}"
 
 def process_text_with_ollama(text):
@@ -132,21 +137,36 @@ def process_text_with_ollama(text):
               f"Can you describe it properly (without any spelling errors) for a blind person within 19 words? "
               f"[(imagecap: {image_caption} and ocrtext: {ocr_text})]")
     llm = Ollama(model="llama3")
-    print("running llama3 ... ")
+    print("Running llama3 ...")
     return llm.invoke(prompt)
 
-def text_to_speech(text):
+def translate_text_to_kannada(text):
+    """Translate text to Kannada."""
+    translator = Translator()
+    translated = translator.translate(text, dest='kn')
+    return translated.text
+
+def text_to_speech(text, lang='en'):
     """Convert text to speech and return the audio data."""
-    tts = gTTS(text=text, lang='en')
+    if lang == 'kn':
+        text = translate_text_to_kannada(text)
+    tts = gTTS(text=text, lang=lang)
     audio_data = io.BytesIO()
     tts.write_to_fp(audio_data)
     audio_data.seek(0)
     return audio_data.read()
 
-def send_audio_to_client(audio_data, client_socket):
+def save_audio_file(audio_data, filename):
+    """Save audio data to a file."""
+    with open(filename, 'wb') as f:
+        f.write(audio_data)
+
+def send_audio_to_client(audio_data_en, audio_data_kan, client_socket):
     """Send the audio data back to the client."""
-    send_msg(client_socket, audio_data)
-    print("Audio sent back to client")
+    send_msg(client_socket, audio_data_en)
+    print("English audio sent back to client")
+    send_msg(client_socket, audio_data_kan)
+    print("Kannada audio sent back to client")
     client_socket.close()
 
 if __name__ == "__main__":
