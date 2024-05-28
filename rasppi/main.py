@@ -87,28 +87,28 @@ def send_image_and_receive_audio(ip_address):
         client_socket.close()
 
 def main():
-    try:
-        while True:
-            gpio_state_capture = GPIO.input(gpio_pin_capture)
-            if gpio_state_capture == GPIO.LOW:
-                print("GPIO pin is LOW. Capturing and sending image...")
-                capture_image()
-                mac_address = "C0-A5-E8-6F-94-E7"
-                ip_address = get_device_ip(mac_address)
-                audio_file_paths = send_image_and_receive_audio(ip_address)
-                if audio_file_paths:
-                    for audio_file_path in audio_file_paths:
-                        print(f"Audio file saved: {audio_file_path}")
-                os.system("python ean.py")
-                break
+    # try:
+    while True:
+        gpio_state_capture = GPIO.input(gpio_pin_capture)
+        if gpio_state_capture == GPIO.LOW:
+            print("GPIO pin is LOW. Capturing and sending image...")
+            capture_image()
+            mac_address = "C0-A5-E8-6F-94-E7"
+            ip_address = get_device_ip(mac_address)
+            audio_file_paths = send_image_and_receive_audio(ip_address)
+            if audio_file_paths:
+                for audio_file_path in audio_file_paths:
+                    print(f"Audio file saved: {audio_file_path}")
+            os.system("python ean.py")
+            break
 
-            time.sleep(1)
+        time.sleep(1)
 
-    except KeyboardInterrupt:
-        print("Exiting...")
-    finally:
-        print("in finally")
-        GPIO.cleanup()
+    # except KeyboardInterrupt:
+    #     print("Exiting...")
+    # finally:
+    #     print("in finally")
+    #     GPIO.cleanup()
 
 if __name__ == "__main__":
     main()
